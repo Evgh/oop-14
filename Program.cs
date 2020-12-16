@@ -126,7 +126,7 @@ namespace oop_14
             ///
             Computer ccomp = new Computer("UnSoft", "UnHard");
             Computer[] comps = new Computer[] { comp, compDJSON, compDXML, compDSOAP, compDBin, ccomp};
-            CustomSerializer<Computer[]>.SerializeXML(comps, "SerializeXML.xml");
+            CustomSerializer<Computer[]>.SerializeXML(comps, "SerializeXML1.xml");
             
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(@"D:\OOP\oop-14\bin\Debug\SerializeXML1.xml");
@@ -136,7 +136,26 @@ namespace oop_14
                 Console.WriteLine(x.OuterXml);
             XmlNode childnode = xRoot.SelectSingleNode("Computer[Software='UnSoft']");
             Console.WriteLine(childnode.OuterXml);
+            
+            ///
 
+            XDocument xdoc = XDocument.Load(@"D:\OOP\oop-14\bin\Debug\SerializeXML1.xml");
+            XElement root = xdoc.Element("ArrayOfComputer");
+            foreach (XElement xe in root.Elements("Computer"))
+            {
+                if (xe.Element("Software").Value == "Soft")
+                {
+                    xe.Element("Software").Value = "Programs";
+                }
+                else if (xe.Element("Software").Value == "UnSoft")
+                {
+                    xe.Remove();
+                }
+            }
+            root.Add(new XElement("Computer",
+                       new XElement("Hardware", new XElement("Type", "Panchenko")),
+                       new XElement("Sofware", "Kulikov")));
+            xdoc.Save(@"D:\OOP\oop-14\bin\Debug\SerializeXML2.xml");
 
             Console.ReadKey();
         }
